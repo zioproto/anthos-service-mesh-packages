@@ -3,13 +3,16 @@ kind: Namespace
 metadata:
   labels:
     control-plane: controller-manager
-  name: canonical-service-system
+  annotations:
+    gke.io/cluster: "gke://PROJECT_ID/us-central1-c/asm-cluster" # {"$ref":"#/definitions/io.k8s.cli.substitutions.gkeio-cluster"}
+  name: asm-system
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.2.5
+    gke.io/cluster: "gke://PROJECT_ID/us-central1-c/asm-cluster" # {"$ref":"#/definitions/io.k8s.cli.substitutions.gkeio-cluster"}
   creationTimestamp: null
   name: canonicalservices.anthos.cloud.google.com
 spec:
@@ -120,7 +123,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: canonical-service-leader-election-role
-  namespace: canonical-service-system
+  namespace: asm-system
+  annotations:
+    gke.io/cluster: "gke://PROJECT_ID/us-central1-c/asm-cluster" # {"$ref":"#/definitions/io.k8s.cli.substitutions.gkeio-cluster"}
 rules:
 - apiGroups:
   - ""
@@ -154,6 +159,8 @@ kind: ClusterRole
 metadata:
   creationTimestamp: null
   name: canonical-service-manager-role
+  annotations:
+    gke.io/cluster: "gke://PROJECT_ID/us-central1-c/asm-cluster" # {"$ref":"#/definitions/io.k8s.cli.substitutions.gkeio-cluster"}
 rules:
 - apiGroups:
   - ""
@@ -196,6 +203,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: canonical-service-proxy-role
+  annotations:
+    gke.io/cluster: "gke://PROJECT_ID/us-central1-c/asm-cluster" # {"$ref":"#/definitions/io.k8s.cli.substitutions.gkeio-cluster"}
 rules:
 - apiGroups:
   - authentication.k8s.io
@@ -224,7 +233,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: canonical-service-leader-election-rolebinding
-  namespace: canonical-service-system
+  namespace: asm-system
+  annotations:
+    gke.io/cluster: "gke://PROJECT_ID/us-central1-c/asm-cluster" # {"$ref":"#/definitions/io.k8s.cli.substitutions.gkeio-cluster"}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -232,12 +243,14 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: canonical-service-system
+  namespace: asm-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: canonical-service-manager-rolebinding
+  annotations:
+    gke.io/cluster: "gke://PROJECT_ID/us-central1-c/asm-cluster" # {"$ref":"#/definitions/io.k8s.cli.substitutions.gkeio-cluster"}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -245,12 +258,14 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: canonical-service-system
+  namespace: asm-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: canonical-service-proxy-rolebinding
+  annotations:
+    gke.io/cluster: "gke://PROJECT_ID/us-central1-c/asm-cluster" # {"$ref":"#/definitions/io.k8s.cli.substitutions.gkeio-cluster"}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -258,7 +273,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: canonical-service-system
+  namespace: asm-system
 ---
 apiVersion: v1
 kind: Service
@@ -266,7 +281,9 @@ metadata:
   labels:
     control-plane: controller-manager
   name: canonical-service-controller-manager-metrics-service
-  namespace: canonical-service-system
+  namespace: asm-system
+  annotations:
+    gke.io/cluster: "gke://PROJECT_ID/us-central1-c/asm-cluster" # {"$ref":"#/definitions/io.k8s.cli.substitutions.gkeio-cluster"}
 spec:
   ports:
   - name: https
@@ -281,7 +298,9 @@ metadata:
   labels:
     control-plane: controller-manager
   name: canonical-service-controller-manager
-  namespace: canonical-service-system
+  namespace: asm-system
+  annotations:
+    gke.io/cluster: "gke://PROJECT_ID/us-central1-c/asm-cluster" # {"$ref":"#/definitions/io.k8s.cli.substitutions.gkeio-cluster"}
 spec:
   replicas: 1
   selector:
@@ -308,7 +327,7 @@ spec:
         - --enable-leader-election
         command:
         - /manager
-        image: gcr.io/sm-canonical-service/canonical-service-controller:v0.1.0
+        image: gcr.io/sm-canonical-service/canonical-service-controller:v1.0.0
         name: manager
         resources:
           limits:
