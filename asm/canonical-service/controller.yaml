@@ -193,7 +193,7 @@ rules:
 - apiGroups:
   - networking.istio.io
   resources:
-  - workloadentry
+  - workloadentries
   verbs:
   - get
   - list
