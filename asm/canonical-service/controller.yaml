@@ -329,7 +329,7 @@ spec:
         - --enable-leader-election
         command:
         - /manager
-        image: gcr.io/sm-canonical-service/canonical-service-controller:v1.0.0
+        image: gcr.io/gke-release-staging/asm/canonical-service-controller:1.6.8-asm.2
         name: manager
         resources:
           limits:
